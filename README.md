@@ -9,5 +9,5 @@ Example of the result:
 
 ![Result](https://i.ibb.co/y0wT2nr/scriptusers.png)
 
-# NOTE: If you see the last user Khalid has no info which means the user is deleted but its folder is still there in /home/
+NOTE: If you see the last user Khalid has no info which means the user is deleted but its folder is still there in /home/
 
