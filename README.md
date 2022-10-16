@@ -5,6 +5,10 @@ Like creation time, Last login, UID, GID, passwd, and shadow.
 
 These informations are values especially when you work as DFIR.
 
+Usage:
+
+``` sudo bash user.sh > result.csv ```
+
 Example of the result: 
 
 ![Result](https://i.ibb.co/y0wT2nr/scriptusers.png)
