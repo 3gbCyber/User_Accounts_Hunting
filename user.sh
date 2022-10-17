@@ -2,18 +2,22 @@
 
 #ForRoot
 
-echo User, Created Time, Password Last Changed, Last Login, UID, GID, Passwd, Shadow
+echo User, Created Time, Password Last Changed, Last Login, User Status, UID, GID, Has Password, Sudo Access, Passwd, Shadow
 
 createdroot=`sudo ls -alct / | tail -1 | awk '{print $6 ,$7, $8}'`
 rootpasschanged=`passwd -S root | awk '{print $3}'`
 rootid=`id -u root`
 rootgroupid=`id -g root`
-rootetcpasswd=`sudo grep root:x /etc/passwd | sed -r 's/[,]+/./g'`
-rootetcshadow=`sudo grep root /etc/shadow | sed -r 's/[,]+/./g'`
+rootetcpasswd=`echo '"'$(sudo grep root /etc/passwd 2>/dev/null)'"'`
+rootetcshadow=`echo '"'$(sudo grep root /etc/shadow 2>/dev/null)'"'`
 rootlastlogin=`last root | grep root`
+rootsudo=`echo "I'm the sudo"`
+
+rootstatus=`if [[ $(passwd --status root | awk '{print $2}') == "P" ]]; then echo "Enable"; else echo "Disable"; fi`
+roothaspass=`if [[ $(cat /etc/shadow | grep root | grep '/' 2>/dev/null) ]]; then echo "True"; else echo "False";fi`
 
 
-echo "root, $createdroot, $rootpasschanged, $rootlastlogin, $rootid, $rootgroupid, $rootetcpasswd, $rootetcshadow"
+echo "root, $createdroot, $rootpasschanged, $rootlastlogin, $rootstatus, $rootid, $rootgroupid, $roothaspass, $rootsudo, $rootetcpasswd, $rootetcshadow"
 
 #ForAllUsers
 
@@ -28,13 +32,17 @@ do
                         do
                         	userid=`id -u $user 2>/dev/null`
                         	groupid=`id -g $user 2>/dev/null`
-                        	etcpasswd=`sudo grep $user:x /etc/passwd | sed -r 's/[,]+/./g' 2>/dev/null`
-                        	etcshadow=`sudo grep $user /etc/shadow | sed -r 's/[,]+/./g' 2>/dev/null`
+                        	etcpasswd=`echo '"'$(sudo grep $user /etc/passwd 2>/dev/null)'"'`
+                        	etcshadow=`echo '"'$(sudo grep $user /etc/shadow 2>/dev/null)'"'`
                         	lastlogin=`last $user | head -n 1 | awk '{print $5,$6,$7,$8,$9,$10,$11,$12}' 2>/dev/null`
-                        	
                                 userpasschanged=`passwd -S $user | awk '{print $3}' 2>/dev/null`
+                                usersudo=`sudo -l -U $user | tail -n1`
 
-      		                echo "$user, $createduser, $userpasschanged, $lastlogin, $userid, $groupid, $etcpasswd, $etcshadow"
+                                userstatus=`if [[ $(passwd --status $user | awk '{print $2}') == "P" ]]; then echo "Enable"; else echo "Disable"; fi`
+                                haspass=`if [[ $(cat /etc/shadow | grep $user | grep '/' 2>/dev/null) ]]; then echo "True"; else echo "False";fi`
+
+
+      		                echo "$user, $createduser, $userpasschanged, $lastlogin, $userstatus, $userid, $groupid, $haspass, $usersudo, $etcpasswd, $etcshadow"
                                 
                         done
                 done
