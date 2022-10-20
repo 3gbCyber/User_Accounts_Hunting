@@ -4,13 +4,21 @@ The Script helps you to know all users that has a folder in /home/ and give you 
 Like:
 
 1- Created Time
+
 2- Last Change Password
+
 3- Last Login
+
 4- User Status
+
 5- UID
+
 6- GID
+
 7- Has Password?
+
 8- Sudo Access
+
 9- etc/passwd
 
 These informations are values especially when you work as DFIR.
