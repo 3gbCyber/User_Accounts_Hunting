@@ -2,14 +2,14 @@
 
 #ForRoot
 
-echo User, Created Time, Password Last Changed, Last Login, User Status, UID, GID, Has Password, Sudo Access, Passwd, Shadow
+echo User, Created Time, Password Last Changed, Last Login, User Status, UID, GID, Has Password, Sudo Access, Passwd
 
 createdroot=`sudo ls -alct / | tail -1 | awk '{print $6 ,$7, $8}'`
 rootpasschanged=`passwd -S root | awk '{print $3}'`
 rootid=`id -u root`
 rootgroupid=`id -g root`
 rootetcpasswd=`echo '"'$(sudo grep root /etc/passwd 2>/dev/null)'"'`
-rootetcshadow=`echo '"'$(sudo grep root /etc/shadow 2>/dev/null)'"'`
+
 rootlastlogin=`last root | grep root`
 rootsudo=`echo "I'm the sudo"`
 
@@ -17,7 +17,7 @@ rootstatus=`if [[ $(passwd --status root | awk '{print $2}') == "P" ]]; then ech
 roothaspass=`if [[ $(cat /etc/shadow | grep root | grep '/' 2>/dev/null) ]]; then echo "True"; else echo "False";fi`
 
 
-echo "root, $createdroot, $rootpasschanged, $rootlastlogin, $rootstatus, $rootid, $rootgroupid, $roothaspass, $rootsudo, $rootetcpasswd, $rootetcshadow"
+echo "root, $createdroot, $rootpasschanged, $rootlastlogin, $rootstatus, $rootid, $rootgroupid, $roothaspass, $rootsudo, $rootetcpasswd"
 
 #ForAllUsers
 
@@ -33,7 +33,7 @@ do
                         	userid=`id -u $user 2>/dev/null`
                         	groupid=`id -g $user 2>/dev/null`
                         	etcpasswd=`echo '"'$(sudo grep $user /etc/passwd 2>/dev/null)'"'`
-                        	etcshadow=`echo '"'$(sudo grep $user /etc/shadow 2>/dev/null)'"'`
+                        	
                         	lastlogin=`last $user | head -n 1 | awk '{print $5,$6,$7,$8,$9,$10,$11,$12}' 2>/dev/null`
                                 userpasschanged=`passwd -S $user | awk '{print $3}' 2>/dev/null`
                                 usersudo=`sudo -l -U $user | tail -n1`
@@ -42,7 +42,7 @@ do
                                 haspass=`if [[ $(cat /etc/shadow | grep $user | grep '/' 2>/dev/null) ]]; then echo "True"; else echo "False";fi`
 
 
-      		                echo "$user, $createduser, $userpasschanged, $lastlogin, $userstatus, $userid, $groupid, $haspass, $usersudo, $etcpasswd, $etcshadow"
+      		                echo "$user, $createduser, $userpasschanged, $lastlogin, $userstatus, $userid, $groupid, $haspass, $usersudo, $etcpasswd"
                                 
                         done
                 done
