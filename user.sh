@@ -13,7 +13,7 @@ rootetcpasswd=`echo '"'$(sudo grep root /etc/passwd 2>/dev/null)'"'`
 rootlastlogin=`last root | grep root`
 rootsudo=`echo "I'm the sudo"`
 
-rootstatus=`if [[ $(passwd --status root | awk '{print $2}') == "P" ]]; then echo "Enable"; else echo "Disable"; fi`
+rootstatus=`if [[ $(passwd --status root | awk '{print $2}') == "L" ]]; then echo "Disable"; else echo "Enable"; fi`
 roothaspass=`if [[ $(cat /etc/shadow | grep root | grep '/' 2>/dev/null) ]]; then echo "True"; else echo "False";fi`
 
 
@@ -38,7 +38,7 @@ do
                                 userpasschanged=`passwd -S $user | awk '{print $3}' 2>/dev/null`
                                 usersudo=`sudo -l -U $user | tail -n1`
 
-                                userstatus=`if [[ $(passwd --status $user | awk '{print $2}') == "P" ]]; then echo "Enable"; else echo "Disable"; fi`
+                                userstatus=`if [[ $(passwd --status $user | awk '{print $2}') == "L" ]]; then echo "Disable"; else echo "Enable"; fi`
                                 haspass=`if [[ $(cat /etc/shadow | grep $user | grep '/' 2>/dev/null) ]]; then echo "True"; else echo "False";fi`
 
 
