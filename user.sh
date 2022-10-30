@@ -10,7 +10,7 @@ rootid=`id -u root`
 rootgroupid=`id -g root`
 rootetcpasswd=`echo '"'$(sudo grep root /etc/passwd 2>/dev/null)'"'`
 
-rootlastlogin=`last root | grep root`
+rootlastlogin=`last root | grep root | head -n 1 | awk '{print $5,$6,$7,$8,$9,$10,$11,$12}' 2>/dev/null`
 rootsudo=`echo "I'm the sudo"`
 
 rootstatus=`if [[ $(passwd --status root | awk '{print $2}') == "L" ]]; then echo "Disable"; else echo "Enable"; fi`
